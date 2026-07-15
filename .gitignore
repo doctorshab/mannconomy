@@ -1,3 +1,9 @@
-venv/
-.env
+# .gitignore
 __pycache__/
+*.pyc
+.env
+venv/
+.venv/
+*.db
+*.sql.bak
+.vscode/

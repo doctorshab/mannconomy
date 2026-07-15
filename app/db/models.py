@@ -105,10 +105,11 @@ class Item(Base):
 class PriceComp(Base):
     __tablename__ = "price_comps"
     id = Column(Integer, primary_key=True, index=True)
+
     
     # Core Item Link
     item_id = Column(Integer, ForeignKey("items.id"), nullable=False)
-    item = relationship("Item")
+    item = relationship("Item",back_populates="price_comps")
     
     # FK Lookups
     quality_id = Column(Integer, ForeignKey("qualities.id"), nullable=False)
@@ -121,8 +122,8 @@ class PriceComp(Base):
     collection_id = Column(Integer, ForeignKey("collections.id"))
     botkiller_tier_id = Column(Integer, ForeignKey("botkiller_tiers.id"))
     holiday_restriction_id = Column(Integer, ForeignKey("holiday_restrictions.id"))
-    # relationships
     war_paint_id = Column(Integer, ForeignKey("war_paints.id"))
+    # relationships
     quality = relationship("Quality")
     killstreak_tier = relationship("KillstreakTier")
     sheen = relationship("Sheen")
@@ -143,6 +144,9 @@ class PriceComp(Base):
     is_australium = Column(Boolean, nullable=False, default=False)
     
     # Pricing & Metadata
+    transaction_timestamp = Column(Integer, nullable=False, index=True)
+    listing_type = Column(String(50), nullable=False)                 # Added length
+    external_id = Column(String(100), unique=True, nullable=True)     # Added length
     price_keys = Column(Numeric(10, 2))
     price_metal = Column(Numeric(10, 2))
     source = Column(String(100), nullable=False)
@@ -151,6 +155,14 @@ class PriceComp(Base):
     # Many-to-Many Relationships
     spells = relationship("Spell", secondary=comp_spells)
     strange_parts = relationship("StrangePart", secondary=comp_strange_parts)
+    __table_args__ = (
+        UniqueConstraint(
+            'item_id', 
+            'transaction_timestamp', 
+            'listing_type', 
+            name='uix_item_timestamp_type'
+        ),
+    )
 
 
 # ==========================================

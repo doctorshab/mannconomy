@@ -3,7 +3,7 @@ from app.db.models import Item
 session = SessionLocal()
 try:
     results = session.query(Item).filter(Item.defindex == 900001).all()
-    query = session.query(PriceComp).filter(PriceComp.item_id == 10).options(joinedload(PriceComp.quality),selectinload(PriceComp.spells)).all()
+    query = session.query(PriceComp).filter(PriceComp.item_id == 10,PriceComp.quality_id == requested.quality_id).options(joinedload(PriceComp.quality),selectinload(PriceComp.spells)).all()
     if not results:
         print("No items found with that defindex.")
     else:
