@@ -1,10 +1,10 @@
 from sqlalchemy.orm import Session
 from datetime import datetime
-from app.db.models import PriceComp, CompSpell, CompStrangePart
+from app.db.models import PriceComp
 from app.core.score import score_comp
 from sqlalchemy.orm import joinedload, selectinload
 from datetime import datetime, timezone
-from app.db.core import compute_liquidity
+from app.core.liquidity import compute_liquidity
 
 
 def retrieve_comps(db_session, req_item):

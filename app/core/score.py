@@ -5,7 +5,9 @@ def score_wear_float( req_float, comp_float, weight):
     if req_float is None and comp_float is None:
         return weight
     if req_float is None or comp_float is None:
-        return 0
+        return 0.0
+    req_float = float(req_float)
+    comp_float = float(comp_float)
     result = weight * (1 - abs(req_float - comp_float))
     return result
 
@@ -28,11 +30,11 @@ def score_comp(req_item, comp_item):
 
     total_score+=score_wear_float(req_item.get("wear_float"),comp_item.wear_float,WEIGHTS["wear_float"])
 
-    comp_spell_ids = [s.spell_id for s in comp_item.spells]
+    comp_spell_ids = [s.id for s in comp_item.spells]
     req_spell_ids=req_item.get("spells",[])
     total_score+=score_list_overlap(req_spell_ids,comp_spell_ids,WEIGHTS["spells"])
 
-    comp_strange_parts_ids=[s.strange_part_id for s in comp_item.strange_parts]
+    comp_strange_parts_ids=[s.id for s in comp_item.strange_parts]
     req_strange_parts_ids=req_item.get("strange_parts",[])
     total_score+=score_list_overlap(req_strange_parts_ids,comp_strange_parts_ids,WEIGHTS["strange_parts"])
 

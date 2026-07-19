@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Numeric, JSON, Boolean, DateTime, Table
+from sqlalchemy import Column, Integer, String, ForeignKey,UniqueConstraint , Numeric, JSON, Boolean, DateTime, Table
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from app.db.base import Base
@@ -109,7 +109,7 @@ class PriceComp(Base):
     
     # Core Item Link
     item_id = Column(Integer, ForeignKey("items.id"), nullable=False)
-    item = relationship("Item",back_populates="price_comps")
+    item = relationship("Item")
     
     # FK Lookups
     quality_id = Column(Integer, ForeignKey("qualities.id"), nullable=False)
