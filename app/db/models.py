@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey,UniqueConstraint , Numeric, JSON, Boolean, DateTime, Table
+from sqlalchemy import Column, Integer, String, ForeignKey, UniqueConstraint, Numeric, JSON, Boolean, DateTime, Table, Index, CheckConstraint
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from app.db.base import Base
@@ -162,6 +162,13 @@ class PriceComp(Base):
             'listing_type', 
             name='uix_item_timestamp_type'
         ),
+        # Matches the hard-filter query in app/core/retrive.py
+        Index('idx_matching', 'item_id', 'quality_id', 'killstreak_tier_id'),
+        # Matches the recency lookups used for liquidity scoring
+        Index('idx_recency', 'item_id', 'recorded_at'),
+        CheckConstraint('price_keys IS NULL OR price_keys >= 0', name='ck_price_keys_nonneg'),
+        CheckConstraint('price_metal IS NULL OR price_metal >= 0', name='ck_price_metal_nonneg'),
+        CheckConstraint('wear_float IS NULL OR (wear_float >= 0 AND wear_float <= 1)', name='ck_wear_float_range'),
     )
 
 

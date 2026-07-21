@@ -67,8 +67,7 @@ def compute_confidence(comps: List[Dict[str, Any]], point_estimate: float, low: 
     score_size = min(comp_count / target_sample_size, 1.0)
     
     # 2. Match Quality (average soft score)
-    score_match = sum(comp['soft_match_score'] for comp in comps) / comp_count
-    
+    score_match = (sum(comp['soft_match_score'] for comp in comps) / comp_count) / 100.0
     # 3. Price Dispersion (tighter spread = higher confidence)
     # Zero guard: if point_estimate is 0, we can't calculate relative spread safely
     if point_estimate <= 0:
